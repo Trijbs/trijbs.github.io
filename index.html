@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trijbs</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Page Background -->
+    <div class="page-background"></div>
+
+    <!-- Text Bar -->
+    <div class="text-bar">
+        <span class="marquee-text">Check back for updates and exciting news.  New features coming soon!  Follow us on our social media!</span> 
+    </div>
+
+    <!-- Header -->
+    <header>
+        <nav class="navbar">
+            <a href="#home" class="logo">
+                <img src="https://i.postimg.cc/3wFdLJCr/Asset-3-100.jpg" alt="Trijbs Logo" class="logo-img">
+            </a>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><a href="#shop">Shop</a></li>
+                <li><button id="auth-btn" class="btn-login">Log In</button></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section with GIF -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <div class="text-content">
+                <h1>Welcome to Trijbs</h1>
+                <p>Explore the future of web development with our innovative platform. </p>
+                <a href="#" class="btn-primary">Try Now</a>
+            </div>
+            <div class="globe-container">
+                <img src="https://i.ibb.co/C3D84483/3d-rotating.gif" alt="3D Rotating Object" class="rotating-gif">
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section with Form -->
+    <section class="contact" id="contact">
+        <div class="contact-content">
+            <h2>Contact Us</h2>
+            <form action="https://formspree.io/f/mvgkgzla" method="POST">
+                <p>
+                    <label>Name <input type="text" name="name" required /></label>
+                </p>
+                <p>
+                    <label>Email <input type="email" name="email" required /></label>
+                </p>
+                <p>
+                    <button type="submit" class="btn-primary">Send</button>
+                </p>
+            </form>
+        </div>
+    </section>
+
+    <!-- Shop Section -->
+    <section class="shop">
+        <div class="shop-content">
+            <h2>Visit Our Shop</h2>
+            <p>Explore exclusive Trijbs merchandise and tools at our online store.</p>
+            <a href="https://trijbs.shop" class="btn-primary">Go to Shop</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <a href="#home" class="logo">
+            <img src="https://i.postimg.cc/3wFdLJCr/Asset-3-100.jpg" alt="Trijbs Logo" class="logo-img small-logo">
+        </a>
+        <div class="contact-info">
+            <p>© 2025 Trijbs. All rights reserved.</p>
+            <p>Contact: <a href="mailto:contact@trijbs.com">trjbs@icloud.com</a></p>
+        </div>
+    </footer>
+
+    <!-- Auth Modal -->
+    <div id="auth-modal" class="modal">
+        <div class="modal-content">
+            <span id="close-modal" class="close">&times;</span>
+            <div id="login-form" class="auth-form">
+                <h2>Log In</h2>
+                <form id="login">
+                    <p>
+                        <label>Email <input type="email" id="login-email" required /></label>
+                    </p>
+                    <p>
+                        <label>Password <input type="password" id="login-password" required /></label>
+                    </p>
+                    <p>
+                        <button type="submit" class="btn-primary">Log In</button>
+                    </p>
+                </form>
+                <p>Not a member? <a href="#" id="switch-to-signup">Sign Up</a></p>
+            </div>
+            <div id="signup-form" class="auth-form" style="display: none;">
+                <h2>Sign Up</h2>
+                <form id="signup">
+                    <p>
+                        <label>Email <input type="email" id="signup-email" required /></label>
+                    </p>
+                    <p>
+                        <label>Password <input type="password" id="signup-password" required /></label>
+                    </p>
+                    <p>
+                        <button type="submit" class="btn-primary">Sign Up</button>
+                    </p>
+                </form>
+                <p>Already a member? <a href="#" id="switch-to-login">Log In</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+    <!-- Custom JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
