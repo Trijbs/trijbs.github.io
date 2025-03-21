@@ -110,7 +110,7 @@ auth.onAuthStateChanged((user) => {
 });
 
 function openModal() {
-    modal.style.display = 'show';
+    modal.style.display = 'block';
 }
 
 // Globe follow cursor
