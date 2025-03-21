@@ -110,5 +110,27 @@ auth.onAuthStateChanged((user) => {
 });
 
 function openModal() {
-    modal.style.display = 'block';
+    modal.style.display = 'show';
 }
+
+// Globe follow cursor
+const globe = document.querySelector('.rotating-gif');
+const hero = document.querySelector('.hero');
+
+hero.addEventListener('mousemove', (e) => {
+    const rect = hero.getBoundingClientRect();
+    const globeWidth = globe.offsetWidth;
+    const globeHeight = globe.offsetHeight;
+
+    // Calculate position relative to hero section
+    let x = e.clientX - rect.left - globeWidth / 2;
+    let y = e.clientY - rect.top - globeHeight / 2;
+
+    // Constrain within hero boundaries
+    x = Math.max(0, Math.min(x, rect.width - globeWidth));
+    y = Math.max(0, Math.min(y, rect.height - globeHeight));
+
+    // Apply position
+    globe.style.left = `${x}px`;
+    globe.style.top = `${y}px`;
+});

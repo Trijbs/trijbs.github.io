@@ -128,24 +128,24 @@ body {
     justify-content: center;
     align-items: center;
     padding: 0 20px;
-}
-
-header {
-    margin-top: 41px;
+    position: relative; /* Contain the globe’s movement */
+    overflow: hidden; /* Prevent globe from overflowing */
 }
 
 .hero-content {
     display: flex;
-    align-items: center;
+    align-items: right;
     justify-content: space-between;
     max-width: 1200px;
     width: 100%;
+    position: relative; /* Ensure content stays in flow */
 }
 
 .text-content {
     flex: 1;
-    text-align: left;
+    text-align: right;
     color: #FFFFFF;
+    z-index: 1; /* Keep text above globe */
 }
 
 .text-content h1 {
@@ -179,15 +179,31 @@ header {
 
 /* Globe Container with GIF */
 .globe-container {
-    flex: 1;
-    display: flex;
-    justify-content: center;
+    position: absolute; /* Allow globe to move freely */
+    pointer-events: none; /* Prevent interference with clicks */
 }
 
 .rotating-gif {
-    width: 400px;
-    height: 400px;
+    width: 350px;
+    height: 350px;
     object-fit: contain;
+    transition: transform 0.1s ease; /* Smooth movement */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .hero-content {
+        flex-direction: flex-start;
+        text-align: right;
+    }
+    .text-content {
+        text-align: center;
+    }
+    .rotating-gif {
+        width: 250px;
+        height: 250px;
+        margin-top: 20px;
+    }
 }
 
 /* Contact Section */
