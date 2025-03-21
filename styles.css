@@ -125,7 +125,7 @@ body {
 .hero {
     height: 100vh;
     display: flex;
-    justify-content: center;
+    justify-content: right;
     align-items: center;
     padding: 0 20px;
     position: relative; /* Contain the globe’s movement */
@@ -143,7 +143,7 @@ body {
 
 .text-content {
     flex: 1;
-    text-align: right;
+    text-align: left;
     color: #FFFFFF;
     z-index: 1; /* Keep text above globe */
 }
@@ -187,7 +187,7 @@ body {
     width: 350px;
     height: 350px;
     object-fit: contain;
-    transition: transform 0.1s ease; /* Smooth movement */
+    transition: transform 0.4s ease; /* Smooth movement */
 }
 
 /* Responsive Adjustments */
