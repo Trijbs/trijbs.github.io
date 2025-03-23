@@ -36,30 +36,23 @@ body {
     padding: 10px;
     text-align: center;
     font-size: 16px;
-    color: #FFFFFF;
+    color: #F8333C;
     border-bottom: 0px solid #93A8AC;
     position: relative;
-    overflow: hidden; /* Hide overflow for marquee effect */
-    white-space: nowrap; /* Keep text on one line */
+    overflow: hidden;
+    white-space: nowrap;
 }
 
-/* Marquee Text */
 .marquee-text {
-    display: flex;
-    animation: marquee 20s linear infinite; /* 10s duration, adjust for speed */
-    padding-left: 100%; /* Start off-screen to the right */
+    display: inline-block;
+    animation: marquee 20s linear infinite;
+    padding-left: 100%;
 }
 
-/* Marquee Animation */
 @keyframes marquee {
-    0% {
-        transform: translateX(0);
-    }
-    100% {
-        transform: translateX(-100%); /* Move fully left */
-    }
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
 }
-
 
 /* Header */
 .navbar {
@@ -121,20 +114,6 @@ body {
     background-color: #D32F36;
 }
 
-.btn-shop {
-    background-color: #F8333C;
-    padding: 8px 20px;
-    border-radius: 20px;
-    transition: background-color 0.3s;
-    border: none;
-    color: #FFFFFF;
-    cursor: pointer;
-}
-
-.btn-shop:hover {
-    background-color: #D32F36;
-}
-
 /* Hero Section */
 .hero {
     height: 100vh;
@@ -142,38 +121,40 @@ body {
     justify-content: center;
     align-items: center;
     padding: 0 20px;
-    position: relative; /* Contain the globe’s movement */
-    overflow: hidden; /* Prevent globe from overflowing */
+    position: relative;
+    overflow: hidden;
+}
+
+header {
+    margin-top: 41px;
 }
 
 .hero-content {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    max-width: 1000px;
+    max-width: 1200px;
     width: 100%;
-    position: relative; /* Ensure content stays in flow */
+    position: relative;
 }
 
 .text-content {
     flex: 1;
-    text-align: right;
+    text-align: left;
     color: #FFFFFF;
-    z-index: 1; /* Keep text above globe */
+    z-index: 1;
 }
 
 .text-content h1 {
     font-size: 48px;
     margin-bottom: 20px;
-    animation: fadeIn 3s ease-in-out;
+    animation: fadeIn 1.5s ease-in-out;
 }
 
 .text-content p {
     font-size: 18px;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
     max-width: 500px;
-    text-align: right;
-    animation: fadeIn 3s ease-in-out;
 }
 
 .btn-primary {
@@ -186,41 +167,48 @@ body {
     transition: background-color 0.3s, transform 0.3s;
     border: none;
     cursor: pointer;
-    animation: fadeIn 3s ease-in-out;
 }
 
 .btn-primary:hover {
     background-color: #D32F36;
-    transform: scale(1);
+    transform: scale(1.05);
 }
 
-/* Globe Container with GIF */
 .globe-container {
-    position: absolute; /* Allow globe to move freely */
-    pointer-events: none; /* Prevent interference with clicks */
+    position: absolute;
+    pointer-events: none;
 }
 
 .rotating-gif {
-    width: 450px;
-    height: 450px;
+    width: 350px;
+    height: 350px;
     object-fit: contain;
-    transition: transform 0.3s ease; /* Smooth movement */
+    transition: transform 0.1s ease;
 }
 
-/* Responsive Adjustments */
-@media (max-width: 768px) {
-    .hero-content {
-        flex-direction: flex;
-        text-align: right;
-    }
-    .text-content {
-        text-align: right;
-    }
-    .rotating-gif {
-        width: 250px;
-        height: 250px;
-        margin-top: 20px;
-    }
+/* About Section */
+.about {
+    padding: 60px 20px;
+    background-color: rgba(0, 0, 0, 0.9);
+    text-align: center;
+}
+
+.about-content {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.about h2 {
+    font-size: 36px;
+    margin-bottom: 30px;
+    color: #93A8AC;
+    animation: fadeIn 1s ease-in-out;
+}
+
+.about p {
+    font-size: 18px;
+    margin-bottom: 30px;
+    color: #93A8AC;
 }
 
 /* Contact Section */
@@ -238,7 +226,7 @@ body {
 .contact h2 {
     font-size: 36px;
     margin-bottom: 30px;
-    color: #93a8ac;
+    color: #93A8AC;
     animation: fadeIn 1s ease-in-out;
 }
 
@@ -251,7 +239,7 @@ body {
 .contact label {
     display: block;
     font-size: 18px;
-    color: #93a8ac;
+    color: #93A8AC;
     margin-bottom: 5px;
 }
 
@@ -288,14 +276,14 @@ body {
 .shop h2 {
     font-size: 36px;
     margin-bottom: 20px;
-    color: #93a8ac;
+    color: #93A8AC;
     animation: fadeIn 1s ease-in-out;
 }
 
 .shop p {
     font-size: 18px;
     margin-bottom: 30px;
-    color: #93a8ac;
+    color: #93A8AC;
 }
 
 /* Footer */
@@ -327,6 +315,22 @@ footer {
     color: #D32F36;
 }
 
+.social-links {
+    display: flex;
+    gap: 15px;
+}
+
+.social-icon {
+    color: #F8333C;
+    font-size: 20px;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.social-icon:hover {
+    color: #D32F36;
+}
+
 /* Modal Styles */
 .modal {
     display: none;
@@ -336,14 +340,14 @@ footer {
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Black overlay with transparency */
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 .modal-content {
-    background-color: #93A8AC; /* Teal-gray background */
+    background-color: #93A8AC;
     margin: 15% auto;
     padding: 20px;
-    border: 1px solid #F8333C; /* Red border */
+    border: 1px solid #F8333C;
     width: 80%;
     max-width: 400px;
     border-radius: 10px;
@@ -420,11 +424,11 @@ footer {
         text-align: center;
     }
     .rotating-gif {
-        width: 300px;
-        height: 300px;
+        width: 250px;
+        height: 250px;
         margin-top: 20px;
     }
-    .contact, .shop {
+    .about, .contact, .shop {
         padding: 40px 10px;
     }
     .navbar {
