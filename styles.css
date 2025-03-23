@@ -121,6 +121,20 @@ body {
     background-color: #D32F36;
 }
 
+.btn-shop {
+    background-color: #F8333C;
+    padding: 8px 20px;
+    border-radius: 20px;
+    transition: background-color 0.3s;
+    border: none;
+    color: #FFFFFF;
+    cursor: pointer;
+}
+
+.btn-shop:hover {
+    background-color: #D32F36;
+}
+
 /* Hero Section */
 .hero {
     height: 100vh;
