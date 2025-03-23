@@ -156,9 +156,10 @@ body {
 
 .text-content p {
     font-size: 18px;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     max-width: 500px;
     text-align: right;
+    animation: fadeIn 3s ease-in-out;
 }
 
 .btn-primary {
@@ -171,11 +172,12 @@ body {
     transition: background-color 0.3s, transform 0.3s;
     border: none;
     cursor: pointer;
+    animation: fadeIn 3s ease-in-out;
 }
 
 .btn-primary:hover {
     background-color: #D32F36;
-    transform: scale(1.05);
+    transform: scale(1);
 }
 
 /* Globe Container with GIF */
@@ -194,7 +196,7 @@ body {
 /* Responsive Adjustments */
 @media (max-width: 768px) {
     .hero-content {
-        flex-direction: flex-start;
+        flex-direction: flex;
         text-align: right;
     }
     .text-content {
