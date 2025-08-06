@@ -1,140 +1,141 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trijbs</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="script.js"></script>
-    <link rel="icon" type="https://i.ibb.co/wN4gTwRW/favicon-32x32.png" href="favicon-32x32.png">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trijbs – Digital Creator Platform</title>
+
+  <!-- Meta -->
+  <meta name="description" content="A hub for experimental projects, creative tools, and interactive experiences by Trijbs.">
+  <meta property="og:title" content="Trijbs – Digital Creator Platform" />
+  <meta property="og:description" content="Explore visuals, audio, merch, and digital culture all in one place." />
+  <meta property="og:image" content="https://i.ibb.co/WnxdLGt/shirt1.jpg" />
+  <meta property="og:url" content="https://trijbsworld.nl" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="https://i.ibb.co/b5DwpZZj/Asset-2.png" type="image/png" />
+
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 </head>
 <body>
-    <!-- Page Background -->
-    <div class="page-background"></div>
+  <!-- Loader -->
+  <div id="preloader">
+    <picture>
+      <source srcset="https://i.postimg.cc/qB6DdWSx/in-b.webp" type="image/webp">
+      <img src="https://i.postimg.cc/qB6DdWSx/in-b.png" alt="Trijbs Loading" class="loader-logo" />
+    </picture>
+  </div>
 
-    <!-- Text Bar -->
-    <div class="text-bar">
-        <span class="marquee-text">New features coming soon!  Check back for updates and exciting news. Follow us on our social media!</span> 
+  <!-- Fullscreen Hero -->
+  <section class="fullscreen-hero">
+    <div class="hero-inner">
+      <picture>
+        <source srcset="https://i.ibb.co/b5DwpZZj/Asset-2.webp" type="image/webp">
+        <img id="logo-img" src="https://i.ibb.co/b5DwpZZj/Asset-2.png" alt="Trijbs Logo" class="hero-logo" loading="lazy" />
+      </picture>
+      <h1>Digital Creativity Engine</h1>
+      <p>Where visuals, code & culture collide.</p>
+      <a href="#explore" class="btn-primary">Enter</a>
     </div>
+  </section>
 
-    <!-- Header -->
-    <header>
-        <nav class="navbar">
-            <a href="#home" class="logo">
-                <img src="https://i.ibb.co/FbbGNSXW/Trijbs-TT-zwart-profile.png" alt="Trijbs-TT-zwart-profile" class="logo">
-            </a>
-            <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#contact">Contact</a></li>
-                <a href="https://trijbs.shop" class="btn-shop">Shop</a>
-                <li><button id="auth-btn" class="btn-login">Log In</button></li>
-            </ul>
-        </nav>
-    </header>
-
-    <!-- Hero Section with GIF -->
-    <section class="hero" id="home">
-        <div class="hero-content">
-            <div class="text-content">
-                <h1>Welcome to Trijbs</h1>
-                <p>Explore the future of web development with our innovative platform. </p>
-                <a href="#" class="btn-primary">Try Now</a>
-            </div>
-            <div class="globe-container">
-                <img src="https://i.ibb.co/C3D84483/3d-rotating.gif" alt="3D Rotating Object" class="rotating-gif">
-            </div>
+  <div class="background-wrapper">
+    <!-- Project Showcase -->
+    <section class="grid-showcase" id="explore">
+      <h2>Explore Our Projects</h2>
+      <div class="grid-container">
+        <div class="grid-item">
+          <h3>PopFusion</h3>
+          <p>Music, visuals, and digital vibes combined.</p>
+          <a href="https://trijbs.eu/PopFusion2/" target="_blank" class="btn-secondary">Explore</a>
         </div>
-    </section>
-    <!-- About Section -->
-    <section class="about" id="about">
-        <div class="about-content">
-            <h2>About Trijbs</h2>
-            <p>Trijbs, Where creativity meets innovation. Building the future of web tools and exclusive gear!</p>
-            <p>We’re crafting a platform that empowers creators with cutting-edge tools and AI-driven solutions, alongside a shop for unique Trijbs merchandise. Join us on this journey!</p>
+        <div class="grid-item">
+          <h3>Urban Unleashed</h3>
+          <p>Digital streetwear & immersive design drops.</p>
+          <a href="https://urban-unleashed.vercel.app" target="_blank" class="btn-secondary">View</a>
         </div>
+        <div class="grid-item">
+          <h3>Shop</h3>
+          <p>Merch and creator tools by Trijbs.</p>
+          <a href="https://trijbs.eu/Webshop/" target="_blank" class="btn-secondary">Shop Now</a>
+        </div>
+      </div>
     </section>
 
-    <!-- Shop Section -->
-    <section class="shop">
-        <div class="shop-content">
-            <h2>Visit Our Shop</h2>
-            <p>Explore exclusive Trijbs merchandise and tools at our online store.</p>
-            <a href="https://trijbs.shop" class="btn-primary">Go to Shop</a>
-        </div>
+    <!-- Creator Prompt -->
+    <section class="quote-generator">
+      <h2>Creator Fuel</h2>
+      <blockquote id="quote-box">Loading...</blockquote>
+      <button onclick="loadQuote()" class="btn-secondary">New Quote</button>
     </section>
+  </div>
 
-    <!-- Contact Section with Form -->
-    <section class="contact" id="contact">
-        <div class="contact-content">
-            <h2>Contact Us</h2>
-            <form action="https://formspree.io/f/mvgkgzla" method="POST">
-                <p>
-                    <label>Name <input type="text" name="name" required /></label>
-                </p>
-                <p>
-                    <label>Email <input type="email" name="email" required /></label>
-                </p>
-                <p>
-                    <button type="submit" class="btn-primary">Send</button>
-                </p>
-            </form>
-        </div>
-    </section>
-
-
-    <!-- Footer -->
-    <footer>
-        <a href="#home" class="logo">
-            <img src="https://i.ibb.co/PGvttQMH/trijbs50x50.png" alt="trijbs50x50" class="logo-img">
-        </a>
-        <div class="contact-info">
-            <p>© 2025 Trijbs. All rights reserved.</p>
-            <p>Contact: <a href="mailto:contact@trijbs.com">trjbs@icloud.com</a></p>
-        </div>
-    </footer>
-
-    <!-- Auth Modal -->
-    <div id="auth-modal" class="modal">
-        <div class="modal-content">
-            <span id="close-modal" class="close">&times;</span>
-            <div id="login-form" class="auth-form">
-                <h2>Log In</h2>
-                <form id="login">
-                    <p>
-                        <label>Email <input type="email" id="login-email" required /></label>
-                    </p>
-                    <p>
-                        <label>Password <input type="password" id="login-password" required /></label>
-                    </p>
-                    <p>
-                        <button type="submit" class="btn-primary">Log In</button>
-                    </p>
-                </form>
-                <p>Not a member? <a href="#" id="switch-to-signup">Sign Up</a></p>
-            </div>
-            <div id="signup-form" class="auth-form" style="display: none;">
-                <h2>Sign Up</h2>
-                <form id="signup">
-                    <p>
-                        <label>Email <input type="email" id="signup-email" required /></label>
-                    </p>
-                    <p>
-                        <label>Password <input type="password" id="signup-password" required /></label>
-                    </p>
-                    <p>
-                        <button type="submit" class="btn-primary">Sign Up</button>
-                    </p>
-                </form>
-                <p>Already a member? <a href="#" id="switch-to-login">Log In</a></p>
-            </div>
-        </div>
+  <!-- Audio Player Overlay -->
+  <div class="audio-overlay" id="audioOverlay">
+    <div class="audio-header">
+      <button id="minimizeAudio" title="Toggle Audio Player">–</button>
+      <div class="equalizer"><span></span><span></span><span></span></div>
     </div>
+    <audio controls autoplay loop id="audioPlayer">
+      <source src="https://cdn.pixabay.com/download/audio/2022/10/03/audio_1437c36f6e.mp3?filename=lofi-study-112191.mp3" type="audio/mpeg">
+    </audio>
+  </div>
 
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
-    <!-- Custom JavaScript -->
-    <script src="script.js"></script>
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 Trijbs. All rights reserved.</p>
+    <div class="social-links">
+      <a href="https://twitter.com/trijbs" target="_blank">𝕏</a>
+      <a href="https://instagram.com/trjbs" target="_blank">📷</a>
+      <a href="https://www.tiktok.com/@trijbs.i" target="_blank">🎵</a>
+    </div>
+  </footer>
+
+  <!-- JS -->
+  <script>
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light' || savedTheme === 'dark') {
+      document.body.classList.add(savedTheme + '-mode');
+    } else {
+      const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+      document.body.classList.add(prefersLight ? 'light-mode' : 'dark-mode');
+    }
+
+    const quotes = [
+      "Design is intelligence made visible.",
+      "Create something today even if it sucks.",
+      "Every pixel counts. Every line speaks.",
+      "Don’t just code. Communicate.",
+      "Good design is obvious. Great design is invisible."
+    ];
+
+    function loadQuote() {
+      const quote = quotes[Math.floor(Math.random() * quotes.length)];
+      document.getElementById('quote-box').textContent = quote;
+    }
+
+    window.addEventListener('DOMContentLoaded', loadQuote);
+
+    window.addEventListener("load", function () {
+      const preloader = document.getElementById("preloader");
+      if (preloader) {
+        preloader.style.opacity = "0";
+        preloader.style.pointerEvents = "none";
+        setTimeout(() => preloader.remove(), 500);
+      }
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const toggleBtn = document.getElementById("minimizeAudio");
+      const audioPlayer = document.getElementById("audioPlayer");
+      if (toggleBtn && audioPlayer) {
+        toggleBtn.addEventListener("click", () => {
+          const isHidden = audioPlayer.style.display === "none";
+          audioPlayer.style.display = isHidden ? "block" : "none";
+          toggleBtn.textContent = isHidden ? "–" : "+";
+        });
+      }
+    });
+  </script>
 </body>
 </html>

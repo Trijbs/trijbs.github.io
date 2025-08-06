@@ -1,6 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "firebase/auth";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -20,9 +21,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
+const auth = getAuth(app);
 
 // Modal elements
 const modal = document.getElementById('auth-modal');
@@ -35,14 +34,31 @@ const switchToLogin = document.getElementById('switch-to-login');
 const loginFormDiv = document.getElementById('login-form');
 const signupFormDiv = document.getElementById('signup-form');
 
-// Show modal
-authBtn.addEventListener('click', () => {
+// Handler for login button click (show modal)
+function handleLoginClick() {
     modal.style.display = 'block';
-});
+}
+
+// Handler for logout button click (sign out with error handling)
+function handleLogout() {
+    signOut(auth).catch((error) => {
+        alert('Sign-out error: ' + error.message);
+    });
+}
+
+// Show modal
+authBtn.addEventListener('click', handleLoginClick);
 
 // Close modal
 closeModal.addEventListener('click', () => {
     modal.style.display = 'none';
+});
+
+// Close modal on Escape key
+window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        modal.style.display = 'none';
+    }
 });
 
 // Close modal when clicking outside
@@ -71,9 +87,19 @@ signupForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const email = document.getElementById('signup-email').value;
     const password = document.getElementById('signup-password').value;
-    auth.createUserWithEmailAndPassword(email, password)
+    // Email format validation before signup
+    if (!email.includes('@') || !email.includes('.')) {
+        alert('Enter a valid email address.');
+        return;
+    }
+    createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
+            // Save token in localStorage
+            userCredential.user.getIdToken().then(token => {
+                localStorage.setItem('authToken', token);
+            });
             console.log('User signed up:', userCredential.user);
+            alert('Signup successful!');
             modal.style.display = 'none';
         })
         .catch((error) => {
@@ -86,10 +112,21 @@ loginForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const email = document.getElementById('login-email').value;
     const password = document.getElementById('login-password').value;
-    auth.signInWithEmailAndPassword(email, password)
+    // Email format validation before login
+    if (!email.includes('@') || !email.includes('.')) {
+        alert('Enter a valid email address.');
+        return;
+    }
+    signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
+            // Save token in localStorage
+            userCredential.user.getIdToken().then(token => {
+                localStorage.setItem('authToken', token);
+            });
             console.log('User logged in:', userCredential.user);
+            alert('Login successful!');
             modal.style.display = 'none';
+            window.location.href = '/dashboard.html';
         })
         .catch((error) => {
             alert('Error: ' + error.message);
@@ -97,40 +134,53 @@ loginForm.addEventListener('submit', (e) => {
 });
 
 // Update UI based on auth state
-auth.onAuthStateChanged((user) => {
+onAuthStateChanged(auth, (user) => {
     if (user) {
         authBtn.textContent = 'Log Out';
-        authBtn.removeEventListener('click', openModal);
-        authBtn.addEventListener('click', () => auth.signOut());
+        authBtn.removeEventListener('click', handleLoginClick);
+        authBtn.addEventListener('click', handleLogout);
     } else {
         authBtn.textContent = 'Log In';
-        authBtn.removeEventListener('click', () => auth.signOut());
-        authBtn.addEventListener('click', () => modal.style.display = 'block');
+        authBtn.removeEventListener('click', handleLogout);
+        authBtn.addEventListener('click', handleLoginClick);
     }
 });
 
-function openModal() {
-    modal.style.display = 'block';
+// Dark/Light Mode Toggle
+const toggleTheme = document.getElementById('toggle-theme');
+if (toggleTheme) {
+    toggleTheme.addEventListener('click', () => {
+        // Determine current mode
+        let currentMode = 'dark';
+        if (document.body.classList.contains('light-mode')) {
+            currentMode = 'dark';
+        } else {
+            currentMode = 'light';
+        }
+        // Remove both classes and add the new one
+        document.body.classList.remove('light-mode', 'dark-mode');
+        document.body.classList.add(currentMode + '-mode');
+        localStorage.setItem('theme', currentMode);
+    });
+
+    // Load saved theme on page load and apply the correct class
+    window.addEventListener('DOMContentLoaded', () => {
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light' || savedTheme === 'dark') {
+            document.body.classList.add(savedTheme + '-mode');
+        }
+    });
 }
 
-// Globe follow cursor
-const globe = document.querySelector('.rotating-gif');
-const hero = document.querySelector('.hero');
-
-hero.addEventListener('mousemove', (e) => {
-    const rect = hero.getBoundingClientRect();
-    const globeWidth = globe.offsetWidth;
-    const globeHeight = globe.offsetHeight;
-
-    // Calculate position relative to hero section
-    let x = e.clientX - rect.left - globeWidth / 2;
-    let y = e.clientY - rect.top - globeHeight / 2;
-
-    // Constrain within hero boundaries
-    x = Math.max(0, Math.min(x, rect.width - globeWidth));
-    y = Math.max(0, Math.min(y, rect.height - globeHeight));
-
-    // Apply position
-    globe.style.left = `${x}px`;
-    globe.style.top = `${y}px`;
+// Smooth scroll to anchors
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            e.preventDefault();
+            target.scrollIntoView({
+                behavior: 'smooth'
+            });
+        }
+    });
 });
