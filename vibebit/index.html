@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VibeBit — Interactive Music Visualizer by Trijbs</title>
+  <meta name="description" content="An interactive music visualizer experiment. Drop a track. Watch it move. A VibeBit experiment by Trijbs." />
+  <link rel="icon" href="../logo.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Montserrat:wght@700;800;900&family=Roboto+Mono:wght@400&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --cyan:      #00E5FF;
+      --cyan-dark: #00BCD4;
+      --red:       #F8333C;
+      --bg:        #000000;
+      --surface:   #0a0a0a;
+      --neutral:   #93A8AC;
+      --font-head: 'Montserrat', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      --font-mono: 'Roboto Mono', monospace;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      color: #fff;
+      font-family: var(--font-body);
+      min-height: 100vh;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    /* ── Canvas ── */
+    #canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      cursor: crosshair;
+    }
+
+    /* ── Start Screen ── */
+    #start-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg);
+      transition: opacity 0.6s ease;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    #start-screen.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .vibebit-badge {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 3px;
+      color: var(--cyan);
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      border: 1px solid var(--cyan);
+      padding: 4px 12px;
+      border-radius: 2px;
+    }
+
+    .start-title {
+      font-family: var(--font-head);
+      font-weight: 900;
+      font-size: clamp(2.5rem, 8vw, 6rem);
+      line-height: 0.95;
+      margin-bottom: 1rem;
+      color: #fff;
+    }
+
+    .start-title span { color: var(--cyan); }
+
+    .start-sub {
+      font-size: 0.9rem;
+      color: var(--neutral);
+      max-width: 360px;
+      line-height: 1.7;
+      margin-bottom: 2.5rem;
+    }
+
+    /* Drop zone */
+    #drop-zone {
+      width: 320px;
+      max-width: 90vw;
+      border: 1.5px dashed rgba(0, 229, 255, 0.3);
+      border-radius: 8px;
+      padding: 2rem;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      margin-bottom: 1.5rem;
+    }
+
+    #drop-zone:hover,
+    #drop-zone.drag-over {
+      border-color: var(--cyan);
+      background: rgba(0, 229, 255, 0.04);
+    }
+
+    #drop-zone .drop-icon {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    #drop-zone p {
+      font-size: 0.8rem;
+      color: var(--neutral);
+    }
+
+    #drop-zone strong {
+      color: var(--cyan);
+      display: block;
+      font-size: 0.85rem;
+      margin-bottom: 0.25rem;
+    }
+
+    #file-input { display: none; }
+
+    .or-divider {
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.2);
+      letter-spacing: 2px;
+      margin-bottom: 1.5rem;
+    }
+
+    .demo-btn {
+      font-family: var(--font-head);
+      font-weight: 700;
+      font-size: 0.8rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #000;
+      background: var(--cyan);
+      border: none;
+      padding: 12px 28px;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .demo-btn:hover { background: var(--cyan-dark); transform: scale(1.03); }
+
+    .start-footer {
+      position: absolute;
+      bottom: 1.5rem;
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.2);
+      font-family: var(--font-mono);
+    }
+
+    .start-footer a { color: var(--cyan); text-decoration: none; }
+
+    /* ── HUD (shown during playback) ── */
+    #hud {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 5;
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      opacity: 0;
+      transition: opacity 0.4s;
+      pointer-events: none;
+    }
+
+    #hud.visible {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .hud-brand {
+      font-family: var(--font-head);
+      font-weight: 900;
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      color: rgba(255,255,255,0.5);
+    }
+
+    .hud-brand span { color: var(--cyan); }
+
+    .hud-track {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.4);
+      text-align: right;
+      max-width: 220px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* ── Controls ── */
+    #controls {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      opacity: 0;
+      transition: opacity 0.4s;
+      pointer-events: none;
+    }
+
+    #controls.visible {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .ctrl-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(0,0,0,0.6);
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.2s, background 0.2s;
+      backdrop-filter: blur(8px);
+    }
+
+    .ctrl-btn:hover { border-color: var(--cyan); background: rgba(0, 229, 255, 0.1); }
+
+    .ctrl-btn.active { border-color: var(--cyan); color: var(--cyan); }
+
+    #play-btn {
+      width: 52px;
+      height: 52px;
+      font-size: 1.2rem;
+      border-color: var(--cyan);
+    }
+
+    #play-btn:hover { background: rgba(0, 229, 255, 0.15); }
+
+    .ctrl-hint {
+      position: fixed;
+      bottom: 5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: rgba(255,255,255,0.2);
+      letter-spacing: 1.5px;
+      z-index: 5;
+      white-space: nowrap;
+      opacity: 0;
+      transition: opacity 0.4s;
+      pointer-events: none;
+    }
+
+    .ctrl-hint.visible { opacity: 1; }
+
+    /* ── Mode indicator ── */
+    #mode-label {
+      position: fixed;
+      top: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 2px;
+      color: rgba(0, 229, 255, 0.4);
+      z-index: 5;
+      opacity: 0;
+      transition: opacity 0.4s;
+      pointer-events: none;
+    }
+
+    #mode-label.visible { opacity: 1; }
+
+    :focus-visible {
+      outline: 2px solid var(--cyan);
+      outline-offset: 3px;
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="canvas"></canvas>
+
+  <!-- Start screen -->
+  <div id="start-screen">
+    <div class="vibebit-badge">VibeBit — Experiment 001</div>
+    <h1 class="start-title">Drop a track.<br><span>Watch it move.</span></h1>
+    <p class="start-sub">
+      An interactive music visualizer. Your audio never leaves your device.
+      Move your mouse to shift the color field. Click the canvas to interact.
+    </p>
+
+    <div id="drop-zone" role="button" tabindex="0" aria-label="Drop a music file or click to browse">
+      <div class="drop-icon">🎵</div>
+      <strong>Drop a music file here</strong>
+      <p>MP3, WAV, FLAC, OGG — anything works</p>
+    </div>
+
+    <input type="file" id="file-input" accept="audio/*" aria-label="Choose a music file" />
+
+    <p class="or-divider">— OR —</p>
+
+    <button class="demo-btn" id="demo-btn">Play demo track</button>
+
+    <p class="start-footer">
+      Built by <a href="/" target="_blank">Trijbs</a> — where visuals, code &amp; culture collide
+    </p>
+  </div>
+
+  <!-- HUD -->
+  <header id="hud" aria-label="Player info">
+    <div class="hud-brand">VIBE<span>BIT</span></div>
+    <div class="hud-track" id="track-name">demo track</div>
+  </header>
+
+  <div id="mode-label" aria-live="polite"></div>
+
+  <!-- Controls -->
+  <nav id="controls" aria-label="Playback controls">
+    <button class="ctrl-btn" id="color-btn" title="Cycle color mode" aria-label="Cycle color mode">◑</button>
+    <button class="ctrl-btn" id="play-btn" title="Play / Pause" aria-label="Play / Pause">⏸</button>
+    <button class="ctrl-btn" id="reset-btn" title="Load new track" aria-label="Load new track">⏏</button>
+  </nav>
+
+  <p class="ctrl-hint" id="ctrl-hint">MOVE MOUSE · CLICK CANVAS · SPACEBAR</p>
+
+  <script>
+  (function() {
+    const canvas  = document.getElementById('canvas');
+    const ctx     = canvas.getContext('2d');
+    const startSc = document.getElementById('start-screen');
+    const hud     = document.getElementById('hud');
+    const controls= document.getElementById('controls');
+    const hint    = document.getElementById('ctrl-hint');
+    const modeLabel = document.getElementById('mode-label');
+    const trackNameEl = document.getElementById('track-name');
+    const dropZone = document.getElementById('drop-zone');
+    const fileInput = document.getElementById('file-input');
+    const demoBtn  = document.getElementById('demo-btn');
+    const playBtn  = document.getElementById('play-btn');
+    const colorBtn = document.getElementById('color-btn');
+    const resetBtn = document.getElementById('reset-btn');
+
+    // ── Audio context ──────────────────────────────────────
+    let audioCtx, analyser, source, audioBuffer;
+    let isPlaying = false;
+    let startTime = 0;
+    let pauseOffset = 0;
+    let animId;
+
+    // ── Mouse ──────────────────────────────────────────────
+    let mouseX = 0.5, mouseY = 0.5;
+    document.addEventListener('mousemove', e => {
+      mouseX = e.clientX / window.innerWidth;
+      mouseY = e.clientY / window.innerHeight;
+    });
+
+    // ── Color modes ────────────────────────────────────────
+    const COLOR_MODES = ['cyan', 'fire', 'mono', 'spectrum'];
+    let colorMode = 0;
+
+    function getBarColor(norm, freq, mouseX) {
+      const hueShift = mouseX * 60;
+      switch(COLOR_MODES[colorMode]) {
+        case 'cyan':
+          return `hsl(${187 + hueShift + norm * 20}, 100%, ${40 + norm * 50}%)`;
+        case 'fire':
+          return `hsl(${norm * 40 + hueShift}, 100%, ${30 + norm * 55}%)`;
+        case 'mono':
+          const l = Math.round(20 + norm * 70);
+          return `hsl(0, 0%, ${l}%)`;
+        case 'spectrum':
+          return `hsl(${freq * 0.5 + hueShift}, 90%, ${35 + norm * 45}%)`;
+      }
+    }
+
+    // ── Canvas resize ──────────────────────────────────────
+    function resize() {
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    // ── Visualizer ────────────────────────────────────────
+    let particles = [];
+
+    function spawnParticle(x, y, color) {
+      particles.push({
+        x, y,
+        vx: (Math.random() - 0.5) * 3,
+        vy: -(Math.random() * 4 + 2),
+        size: Math.random() * 3 + 1,
+        alpha: 1,
+        color
+      });
+    }
+
+    function drawFrame() {
+      animId = requestAnimationFrame(drawFrame);
+
+      const W = canvas.width;
+      const H = canvas.height;
+
+      // Background fade
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.18)';
+      ctx.fillRect(0, 0, W, H);
+
+      if (!analyser) return;
+
+      const bufLen = analyser.frequencyBinCount;
+      const dataArr = new Uint8Array(bufLen);
+      analyser.getByteFrequencyData(dataArr);
+
+      // Bar visualizer
+      const barCount = Math.min(bufLen, 120);
+      const barW = (W / barCount) * 0.7;
+      const gap  = (W / barCount) * 0.3;
+      let peakEnergy = 0;
+
+      for (let i = 0; i < barCount; i++) {
+        const norm  = dataArr[i] / 255;
+        const barH  = norm * (H * 0.65);
+        const x     = i * (barW + gap) + gap / 2;
+        const y     = H - barH;
+        const color = getBarColor(norm, i, mouseX);
+
+        // Glow
+        ctx.shadowBlur = norm > 0.6 ? 12 : 4;
+        ctx.shadowColor = color;
+
+        ctx.fillStyle = color;
+        ctx.fillRect(x, y, barW, barH);
+
+        // Mirror (top, dimmer)
+        ctx.globalAlpha = 0.15;
+        ctx.fillRect(x, 0, barW, barH * 0.4);
+        ctx.globalAlpha = 1;
+
+        peakEnergy = Math.max(peakEnergy, norm);
+
+        // Spawn particles on loud transients
+        if (norm > 0.85 && Math.random() < 0.08) {
+          spawnParticle(x + barW / 2, y, color);
+        }
+      }
+
+      ctx.shadowBlur = 0;
+
+      // Particles
+      particles = particles.filter(p => p.alpha > 0.01);
+      for (const p of particles) {
+        p.x  += p.vx;
+        p.y  += p.vy;
+        p.vy += 0.08; // gravity
+        p.alpha *= 0.94;
+        ctx.globalAlpha = p.alpha;
+        ctx.fillStyle   = p.color;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+
+      // Center circle pulse
+      const avgEnergy = dataArr.slice(0, 10).reduce((a,b) => a+b, 0) / (10*255);
+      const radius = 30 + avgEnergy * 80;
+      const cx = W / 2 + (mouseX - 0.5) * 60;
+      const cy = H * 0.42 + (mouseY - 0.5) * 40;
+
+      const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius);
+      const centerColor = getBarColor(avgEnergy, 60, mouseX);
+      grad.addColorStop(0,   centerColor.replace(/[\d.]+%\)$/, `${60 + avgEnergy * 30}%)`));
+      grad.addColorStop(0.5, centerColor.replace(/[\d.]+%\)$/, `${20 + avgEnergy * 20}%)`));
+      grad.addColorStop(1,   'rgba(0,0,0,0)');
+
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Ring around circle
+      ctx.strokeStyle = centerColor;
+      ctx.lineWidth = 1.5;
+      ctx.globalAlpha = 0.4 + avgEnergy * 0.4;
+      ctx.beginPath();
+      ctx.arc(cx, cy, radius + 8, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+    }
+
+    // ── Audio setup ────────────────────────────────────────
+    function setupAudio(buffer) {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      analyser = audioCtx.createAnalyser();
+      analyser.fftSize = 256;
+      analyser.smoothingTimeConstant = 0.82;
+      analyser.connect(audioCtx.destination);
+    }
+
+    function playBuffer(buffer, offset = 0) {
+      if (source) { try { source.stop(); } catch(e) {} }
+      source = audioCtx.createBufferSource();
+      source.buffer = buffer;
+      source.connect(analyser);
+      source.loop = true;
+      source.start(0, offset);
+      startTime = audioCtx.currentTime - offset;
+      isPlaying = true;
+      playBtn.textContent = '⏸';
+      playBtn.setAttribute('aria-label', 'Pause');
+    }
+
+    function pause() {
+      pauseOffset = audioCtx.currentTime - startTime;
+      if (source) { try { source.stop(); } catch(e) {} }
+      isPlaying = false;
+      playBtn.textContent = '▶';
+      playBtn.setAttribute('aria-label', 'Play');
+    }
+
+    function togglePlay() {
+      if (!audioBuffer) return;
+      if (isPlaying) pause();
+      else playBuffer(audioBuffer, pauseOffset);
+    }
+
+    async function loadFile(file) {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      setupAudio();
+      const arrBuf = await file.arrayBuffer();
+      audioBuffer = await audioCtx.decodeAudioData(arrBuf);
+      pauseOffset = 0;
+      trackNameEl.textContent = file.name.replace(/\.[^.]+$/, '');
+      playBuffer(audioBuffer);
+      showPlayer();
+    }
+
+    async function loadDemo() {
+      demoBtn.textContent = 'Loading...';
+      demoBtn.disabled = true;
+      const url = 'https://cdn.pixabay.com/download/audio/2022/10/03/audio_1437c36f6e.mp3?filename=lofi-study-112191.mp3';
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        setupAudio();
+        const res = await fetch(url);
+        const arr = await res.arrayBuffer();
+        audioBuffer = await audioCtx.decodeAudioData(arr);
+        pauseOffset = 0;
+        trackNameEl.textContent = 'lofi study — demo track';
+        playBuffer(audioBuffer);
+        showPlayer();
+      } catch(e) {
+        demoBtn.textContent = 'Load failed — try a local file';
+        demoBtn.disabled = false;
+      }
+    }
+
+    function showPlayer() {
+      startSc.classList.add('hidden');
+      hud.classList.add('visible');
+      controls.classList.add('visible');
+      hint.classList.add('visible');
+      modeLabel.classList.add('visible');
+      modeLabel.textContent = COLOR_MODES[colorMode].toUpperCase();
+      if (!animId) drawFrame();
+    }
+
+    // ── File drop ──────────────────────────────────────────
+    dropZone.addEventListener('click', () => fileInput.click());
+    dropZone.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') fileInput.click(); });
+
+    dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+    dropZone.addEventListener('drop', e => {
+      e.preventDefault();
+      dropZone.classList.remove('drag-over');
+      const file = e.dataTransfer.files[0];
+      if (file && file.type.startsWith('audio/')) loadFile(file);
+    });
+
+    fileInput.addEventListener('change', e => {
+      const file = e.target.files[0];
+      if (file) loadFile(file);
+    });
+
+    demoBtn.addEventListener('click', loadDemo);
+
+    // ── Controls ───────────────────────────────────────────
+    playBtn.addEventListener('click', togglePlay);
+
+    colorBtn.addEventListener('click', () => {
+      colorMode = (colorMode + 1) % COLOR_MODES.length;
+      modeLabel.textContent = COLOR_MODES[colorMode].toUpperCase();
+      modeLabel.style.opacity = '1';
+    });
+
+    resetBtn.addEventListener('click', () => {
+      pause();
+      audioBuffer = null;
+      pauseOffset = 0;
+      startSc.classList.remove('hidden');
+      hud.classList.remove('visible');
+      controls.classList.remove('visible');
+      hint.classList.remove('visible');
+      demoBtn.textContent = 'Play demo track';
+      demoBtn.disabled = false;
+      fileInput.value = '';
+    });
+
+    canvas.addEventListener('click', () => togglePlay());
+
+    // Spacebar
+    document.addEventListener('keydown', e => {
+      if (e.target === document.body || e.target === canvas) {
+        if (e.key === ' ') { e.preventDefault(); togglePlay(); }
+        if (e.key === 'c' || e.key === 'C') colorBtn.click();
+      }
+    });
+
+    // ── Idle: hide controls ────────────────────────────────
+    let hideTimer;
+    function resetHide() {
+      clearTimeout(hideTimer);
+      controls.style.opacity = '1';
+      hint.style.opacity = '1';
+      hideTimer = setTimeout(() => {
+        if (isPlaying) {
+          controls.style.opacity = '0.15';
+          hint.style.opacity = '0';
+        }
+      }, 3000);
+    }
+    document.addEventListener('mousemove', resetHide);
+    document.addEventListener('keydown', resetHide);
+
+    // ── Console ────────────────────────────────────────────
+    console.log('%c VibeBit ', 'background:#00E5FF;color:#000;font-weight:900;font-size:16px;padding:4px 8px;');
+    console.log('%cexperiment 001 — interactive music visualizer', 'color:#93A8AC;');
+    console.log('%cbuilt with: Web Audio API + Canvas 2D', 'color:#93A8AC;font-family:monospace;');
+    console.log('→ trijbsworld.nl');
+
+    // Start idle loop (draws background even without audio)
+    drawFrame();
+  })();
+  </script>
+</body>
+</html>
