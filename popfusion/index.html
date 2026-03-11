@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PopFusion — Music meets visual. By Trijbs.</title>
+  <meta name="description" content="PopFusion is where sound becomes image. An interactive music-visual experience by Trijbs." />
+  <link rel="icon" href="../logo.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Montserrat:wght@700;800;900&family=Roboto+Mono:wght@400&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --magenta:      #E040FB;
+      --magenta-dark: #C030D9;
+      --magenta-glow: rgba(224, 64, 251, 0.25);
+      --bg:           #000;
+      --surface:      #080508;
+      --neutral:      #93A8AC;
+      --white:        #ffffff;
+      --font-head:    'Montserrat', sans-serif;
+      --font-body:    'Inter', sans-serif;
+      --font-mono:    'Roboto Mono', monospace;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: var(--font-body);
+      overflow-x: hidden;
+    }
+
+    /* ── CANVAS HERO ─────────────────────────────────────── */
+
+    #hero {
+      position: relative;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    #hero-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      padding: 2rem;
+    }
+
+    .brand-tag {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 4px;
+      color: var(--magenta);
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+      display: block;
+    }
+
+    .hero-title {
+      font-family: var(--font-head);
+      font-weight: 900;
+      font-size: clamp(3.5rem, 12vw, 9rem);
+      line-height: 0.9;
+      letter-spacing: -2px;
+      margin-bottom: 1.25rem;
+    }
+
+    .hero-title .pop { color: var(--white); }
+    .hero-title .fusion {
+      color: var(--magenta);
+      text-shadow: 0 0 40px var(--magenta-glow), 0 0 80px var(--magenta-glow);
+    }
+
+    .hero-sub {
+      font-size: clamp(0.9rem, 2vw, 1.1rem);
+      color: var(--neutral);
+      max-width: 440px;
+      line-height: 1.7;
+      margin: 0 auto 2rem;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn-primary-pf {
+      font-family: var(--font-head);
+      font-weight: 700;
+      font-size: 0.8rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #000;
+      background: var(--magenta);
+      border: none;
+      padding: 13px 28px;
+      border-radius: 2px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    }
+
+    .btn-primary-pf:hover {
+      background: var(--magenta-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px var(--magenta-glow);
+    }
+
+    .btn-ghost-pf {
+      font-family: var(--font-head);
+      font-weight: 700;
+      font-size: 0.8rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--magenta);
+      background: transparent;
+      border: 1.5px solid var(--magenta);
+      padding: 12px 28px;
+      border-radius: 2px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .btn-ghost-pf:hover {
+      background: var(--magenta-glow);
+      transform: translateY(-2px);
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 2px;
+      color: rgba(255,255,255,0.2);
+      z-index: 2;
+      animation: bobDown 2s ease-in-out infinite;
+    }
+
+    @keyframes bobDown {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50%       { transform: translateX(-50%) translateY(6px); }
+    }
+
+    /* ── INTERACTIVE SECTION ──────────────────────────────── */
+
+    #interactive {
+      padding: 6rem 2rem;
+      text-align: center;
+      background: var(--surface);
+      position: relative;
+    }
+
+    #interactive::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--magenta), transparent);
+    }
+
+    .section-tag {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 3px;
+      color: var(--magenta);
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .section-title {
+      font-family: var(--font-head);
+      font-weight: 800;
+      font-size: clamp(1.8rem, 5vw, 3.5rem);
+      margin-bottom: 1rem;
+      line-height: 1.1;
+    }
+
+    .section-sub {
+      font-size: 0.9rem;
+      color: var(--neutral);
+      max-width: 480px;
+      margin: 0 auto 3rem;
+      line-height: 1.7;
+    }
+
+    /* Synesthetic pad */
+    #synth-pad {
+      width: 100%;
+      max-width: 700px;
+      margin: 0 auto;
+      aspect-ratio: 16/9;
+      border-radius: 8px;
+      border: 1px solid rgba(224, 64, 251, 0.2);
+      position: relative;
+      overflow: hidden;
+      cursor: crosshair;
+      touch-action: none;
+    }
+
+    #synth-canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .pad-label {
+      position: absolute;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 2px;
+      color: rgba(255,255,255,0.2);
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    /* ── TRACKS SECTION ───────────────────────────────────── */
+
+    #tracks {
+      padding: 6rem 2rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .tracks-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+
+    .track-card {
+      background: #0d0d0d;
+      border: 1px solid rgba(224, 64, 251, 0.12);
+      border-radius: 8px;
+      padding: 1.5rem;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .track-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--magenta);
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+      transform-origin: left;
+    }
+
+    .track-card:hover {
+      border-color: rgba(224, 64, 251, 0.4);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(224, 64, 251, 0.1);
+    }
+
+    .track-card:hover::before { transform: scaleX(1); }
+
+    .track-num {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--magenta);
+      letter-spacing: 2px;
+      margin-bottom: 0.75rem;
+    }
+
+    .track-title {
+      font-family: var(--font-head);
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .track-desc {
+      font-size: 0.8rem;
+      color: var(--neutral);
+      line-height: 1.6;
+    }
+
+    .track-tag {
+      display: inline-block;
+      margin-top: 0.75rem;
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 1px;
+      color: var(--magenta);
+      border: 1px solid rgba(224,64,251,0.3);
+      padding: 2px 8px;
+      border-radius: 2px;
+    }
+
+    /* ── MANIFESTO SECTION ────────────────────────────────── */
+
+    #manifesto {
+      padding: 6rem 2rem;
+      background: var(--surface);
+      text-align: center;
+      position: relative;
+    }
+
+    #manifesto::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--magenta), transparent);
+    }
+
+    .manifesto-text {
+      font-family: var(--font-head);
+      font-weight: 900;
+      font-size: clamp(1.5rem, 4vw, 3rem);
+      line-height: 1.2;
+      max-width: 700px;
+      margin: 0 auto 2rem;
+      color: var(--white);
+    }
+
+    .manifesto-text em {
+      color: var(--magenta);
+      font-style: normal;
+    }
+
+    .manifesto-credit {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.2);
+      letter-spacing: 2px;
+    }
+
+    .manifesto-credit a {
+      color: var(--magenta);
+      text-decoration: none;
+    }
+
+    /* ── FOOTER ───────────────────────────────────────────── */
+
+    footer {
+      padding: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-brand {
+      font-family: var(--font-head);
+      font-weight: 900;
+      font-size: 0.9rem;
+      letter-spacing: 2px;
+      color: rgba(255,255,255,0.3);
+    }
+
+    .footer-brand span { color: var(--magenta); }
+
+    .footer-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .footer-links a {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.25);
+      text-decoration: none;
+      transition: color 0.2s;
+      font-family: var(--font-mono);
+    }
+
+    .footer-links a:hover { color: var(--magenta); }
+
+    :focus-visible {
+      outline: 2px solid var(--magenta);
+      outline-offset: 3px;
+    }
+
+    @media (max-width: 600px) {
+      .hero-title { letter-spacing: -1px; }
+      footer { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hero -->
+  <section id="hero">
+    <canvas id="hero-canvas" aria-hidden="true"></canvas>
+    <div class="hero-content">
+      <span class="brand-tag">A Trijbs Experience</span>
+      <h1 class="hero-title">
+        <span class="pop">Pop</span><br>
+        <span class="fusion">Fusion</span>
+      </h1>
+      <p class="hero-sub">Where sound becomes image. Music and visuals, finally in the same place.</p>
+      <div class="hero-cta">
+        <a href="#interactive" class="btn-primary-pf">Feel it</a>
+        <a href="#tracks" class="btn-ghost-pf">See the work</a>
+      </div>
+    </div>
+    <p class="scroll-hint" aria-hidden="true">↓ scroll</p>
+  </section>
+
+  <!-- Synesthetic Pad -->
+  <section id="interactive" aria-labelledby="interactive-heading">
+    <span class="section-tag">Experiment</span>
+    <h2 class="section-title" id="interactive-heading">Touch the frequency.</h2>
+    <p class="section-sub">Move your cursor across the pad. Every position is a different note and color. This is synesthesia as interaction.</p>
+
+    <div id="synth-pad" role="application" aria-label="Interactive synesthetic sound pad — move your mouse to play">
+      <canvas id="synth-canvas"></canvas>
+      <span class="pad-label">MOVE · CLICK · TOUCH</span>
+    </div>
+  </section>
+
+  <!-- Tracks / Projects -->
+  <section id="tracks" aria-labelledby="tracks-heading">
+    <span class="section-tag">The Work</span>
+    <h2 class="section-title" id="tracks-heading">Sessions.</h2>
+    <p class="section-sub">Each PopFusion drop is a music-visual collision. A sound, a mood, a visual language. All at once.</p>
+
+    <div class="tracks-grid">
+      <div class="track-card">
+        <p class="track-num">001</p>
+        <h3 class="track-title">Outerspace Riddim</h3>
+        <p class="track-desc">Lo-fi textures, deep space reverb. Visual palette: deep violet and grain. Made at 2am in October.</p>
+        <span class="track-tag">lo-fi · ambient</span>
+      </div>
+      <div class="track-card">
+        <p class="track-num">002</p>
+        <h3 class="track-title">Urban Static</h3>
+        <p class="track-desc">Street noise recorded in Rotterdam. Layered with 808s. Visual: concrete grey, red pulse.</p>
+        <span class="track-tag">hip-hop · field recording</span>
+      </div>
+      <div class="track-card">
+        <p class="track-num">003</p>
+        <h3 class="track-title">Collision Theory</h3>
+        <p class="track-desc">What happens when a synth loop meets a skate video edit. Chaotic. Intentional. Both.</p>
+        <span class="track-tag">electronic · experimental</span>
+      </div>
+      <div class="track-card">
+        <p class="track-num">004</p>
+        <h3 class="track-title">More dropping soon.</h3>
+        <p class="track-desc">Building in public. Follow the process on Instagram or X.</p>
+        <span class="track-tag">in progress</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Manifesto -->
+  <section id="manifesto">
+    <p class="manifesto-text">
+      "Sound and image were never meant to be<br>
+      <em>separate things.</em>"
+    </p>
+    <p class="manifesto-credit">
+      — PopFusion by <a href="/" target="_blank">Trijbs</a>
+    </p>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-brand">POP<span>FUSION</span></div>
+    <nav class="footer-links" aria-label="Footer navigation">
+      <a href="/">Trijbs</a>
+      <a href="/vibebit/">VibeBit</a>
+      <a href="https://instagram.com/trijbsworld" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://twitter.com/trijbs" target="_blank" rel="noopener">X</a>
+    </nav>
+  </footer>
+
+  <script>
+  (function() {
+
+    // ── Hero particle field ──────────────────────────────────
+    const heroCanvas = document.getElementById('hero-canvas');
+    const hCtx = heroCanvas.getContext('2d');
+    let W, H;
+    let mouse = { x: 0.5, y: 0.5 };
+    let particles = [];
+
+    function resizeHero() {
+      W = heroCanvas.width  = heroCanvas.offsetWidth;
+      H = heroCanvas.height = heroCanvas.offsetHeight;
+    }
+    resizeHero();
+    window.addEventListener('resize', resizeHero);
+
+    document.addEventListener('mousemove', e => {
+      mouse.x = e.clientX / window.innerWidth;
+      mouse.y = e.clientY / window.innerHeight;
+    });
+
+    // Spawn particles
+    for (let i = 0; i < 80; i++) {
+      particles.push({
+        x: Math.random(),
+        y: Math.random(),
+        size: Math.random() * 1.5 + 0.5,
+        speed: Math.random() * 0.0003 + 0.0001,
+        angle: Math.random() * Math.PI * 2,
+        drift: (Math.random() - 0.5) * 0.002,
+        alpha: Math.random() * 0.4 + 0.1
+      });
+    }
+
+    function drawHero() {
+      requestAnimationFrame(drawHero);
+      hCtx.clearRect(0, 0, W, H);
+
+      // Radial gradient pulse from mouse
+      const gx = mouse.x * W;
+      const gy = mouse.y * H;
+      const grad = hCtx.createRadialGradient(gx, gy, 0, gx, gy, Math.max(W, H) * 0.7);
+      grad.addColorStop(0,   'rgba(224, 64, 251, 0.12)');
+      grad.addColorStop(0.4, 'rgba(224, 64, 251, 0.04)');
+      grad.addColorStop(1,   'rgba(0,0,0,0)');
+      hCtx.fillStyle = grad;
+      hCtx.fillRect(0, 0, W, H);
+
+      // Particles
+      for (const p of particles) {
+        // Drift toward mouse slightly
+        p.x += (mouse.x - p.x) * 0.0003 + Math.cos(p.angle) * p.speed;
+        p.y += (mouse.y - p.y) * 0.0003 + Math.sin(p.angle) * p.speed;
+        p.angle += p.drift;
+
+        // Wrap
+        if (p.x < 0) p.x = 1;
+        if (p.x > 1) p.x = 0;
+        if (p.y < 0) p.y = 1;
+        if (p.y > 1) p.y = 0;
+
+        const dist = Math.hypot(p.x - mouse.x, p.y - mouse.y);
+        const glow = Math.max(0, 1 - dist * 3);
+
+        hCtx.beginPath();
+        hCtx.arc(p.x * W, p.y * H, p.size + glow * 2, 0, Math.PI * 2);
+        hCtx.fillStyle = `rgba(224, 64, 251, ${p.alpha + glow * 0.4})`;
+        hCtx.fill();
+      }
+    }
+
+    drawHero();
+
+    // ── Synesthetic pad ──────────────────────────────────────
+    const pad      = document.getElementById('synth-pad');
+    const sCanvas  = document.getElementById('synth-canvas');
+    const sCtx     = sCanvas.getContext('2d');
+    let padW, padH;
+    let touches    = [];
+    let audioCtx, masterGain;
+    let oscillators= [];
+    let isAudioOn  = false;
+
+    function resizePad() {
+      padW = sCanvas.width  = pad.offsetWidth;
+      padH = sCanvas.height = pad.offsetHeight;
+    }
+    resizePad();
+    window.addEventListener('resize', resizePad);
+
+    function initAudio() {
+      if (isAudioOn) return;
+      isAudioOn = true;
+      audioCtx  = new (window.AudioContext || window.webkitAudioContext)();
+      masterGain = audioCtx.createGain();
+      masterGain.gain.value = 0.15;
+      masterGain.connect(audioCtx.destination);
+    }
+
+    // Pentatonic scale mapped across X axis (C maj pentatonic)
+    const NOTES = [261.63, 293.66, 329.63, 392.00, 440.00, 523.25, 587.33, 659.25, 783.99, 880.00];
+
+    function freqFromX(x) {
+      const idx = Math.floor((x / padW) * NOTES.length);
+      return NOTES[Math.min(idx, NOTES.length - 1)];
+    }
+
+    function colorFromPos(x, y) {
+      const hue  = 270 + (x / padW) * 60;  // purple to magenta range
+      const light = 35 + (1 - y / padH) * 40;
+      return `hsl(${hue}, 90%, ${light}%)`;
+    }
+
+    let activeOsc = null;
+    let activeGain = null;
+
+    function startNote(x, y) {
+      if (!isAudioOn) return;
+      stopNote();
+      const freq = freqFromX(x);
+      activeOsc  = audioCtx.createOscillator();
+      activeGain = audioCtx.createGain();
+      activeOsc.type = 'sine';
+      activeOsc.frequency.value = freq;
+      activeGain.gain.setValueAtTime(0, audioCtx.currentTime);
+      activeGain.gain.linearRampToValueAtTime(0.5, audioCtx.currentTime + 0.05);
+      activeOsc.connect(activeGain);
+      activeGain.connect(masterGain);
+      activeOsc.start();
+    }
+
+    function stopNote() {
+      if (activeOsc) {
+        try {
+          activeGain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.1);
+          activeOsc.stop(audioCtx.currentTime + 0.1);
+        } catch(e) {}
+        activeOsc  = null;
+        activeGain = null;
+      }
+    }
+
+    function updateNote(x) {
+      if (activeOsc) {
+        const freq = freqFromX(x);
+        activeOsc.frequency.linearRampToValueAtTime(freq, audioCtx.currentTime + 0.02);
+      }
+    }
+
+    // Ripple pool
+    let ripples = [];
+
+    function addRipple(x, y, color) {
+      ripples.push({ x, y, r: 2, maxR: 80, alpha: 0.6, color });
+    }
+
+    // Draw pad
+    let padMouse = null;
+    function drawPad() {
+      requestAnimationFrame(drawPad);
+      sCtx.clearRect(0, 0, padW, padH);
+
+      // Background gradient
+      const bg = sCtx.createLinearGradient(0, 0, padW, padH);
+      bg.addColorStop(0,   '#0a000d');
+      bg.addColorStop(1,   '#050010');
+      sCtx.fillStyle = bg;
+      sCtx.fillRect(0, 0, padW, padH);
+
+      // Grid lines
+      sCtx.strokeStyle = 'rgba(224, 64, 251, 0.06)';
+      sCtx.lineWidth = 1;
+      for (let i = 1; i < NOTES.length; i++) {
+        const x = (i / NOTES.length) * padW;
+        sCtx.beginPath();
+        sCtx.moveTo(x, 0);
+        sCtx.lineTo(x, padH);
+        sCtx.stroke();
+      }
+
+      // Mouse glow
+      if (padMouse) {
+        const { x, y } = padMouse;
+        const col = colorFromPos(x, y);
+        const g = sCtx.createRadialGradient(x, y, 0, x, y, 120);
+        g.addColorStop(0,   col.replace('hsl', 'hsla').replace(')', ', 0.3)'));
+        g.addColorStop(1,   'rgba(0,0,0,0)');
+        sCtx.fillStyle = g;
+        sCtx.fillRect(0, 0, padW, padH);
+
+        // Dot
+        sCtx.beginPath();
+        sCtx.arc(x, y, 6, 0, Math.PI * 2);
+        sCtx.fillStyle = col;
+        sCtx.shadowBlur = 16;
+        sCtx.shadowColor = col;
+        sCtx.fill();
+        sCtx.shadowBlur = 0;
+      }
+
+      // Ripples
+      ripples = ripples.filter(r => r.alpha > 0.01);
+      for (const r of ripples) {
+        r.r += 1.5;
+        r.alpha *= 0.95;
+        sCtx.strokeStyle = r.color.replace('hsl', 'hsla').replace(')', `, ${r.alpha})`);
+        sCtx.lineWidth = 1.5;
+        sCtx.beginPath();
+        sCtx.arc(r.x, r.y, r.r, 0, Math.PI * 2);
+        sCtx.stroke();
+      }
+    }
+
+    drawPad();
+
+    // Mouse events
+    pad.addEventListener('mouseenter', () => { initAudio(); });
+
+    pad.addEventListener('mousemove', e => {
+      const rect = pad.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      padMouse = { x, y };
+      if (e.buttons === 1) {
+        updateNote(x);
+        addRipple(x, y, colorFromPos(x, y));
+      }
+    });
+
+    pad.addEventListener('mousedown', e => {
+      const rect = pad.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      initAudio();
+      startNote(x, y);
+      addRipple(x, y, colorFromPos(x, y));
+    });
+
+    pad.addEventListener('mouseup',    stopNote);
+    pad.addEventListener('mouseleave', () => { padMouse = null; stopNote(); });
+
+    // Touch events
+    pad.addEventListener('touchstart', e => {
+      e.preventDefault();
+      initAudio();
+      const rect = pad.getBoundingClientRect();
+      const t = e.touches[0];
+      const x = t.clientX - rect.left;
+      const y = t.clientY - rect.top;
+      padMouse = { x, y };
+      startNote(x, y);
+      addRipple(x, y, colorFromPos(x, y));
+    }, { passive: false });
+
+    pad.addEventListener('touchmove', e => {
+      e.preventDefault();
+      const rect = pad.getBoundingClientRect();
+      const t = e.touches[0];
+      const x = t.clientX - rect.left;
+      const y = t.clientY - rect.top;
+      padMouse = { x, y };
+      updateNote(x);
+      if (Math.random() < 0.3) addRipple(x, y, colorFromPos(x, y));
+    }, { passive: false });
+
+    pad.addEventListener('touchend',   () => { padMouse = null; stopNote(); }, { passive: false });
+
+    // ── Console ─────────────────────────────────────────────
+    console.log('%c PopFusion ', 'background:#E040FB;color:#000;font-weight:900;font-size:16px;padding:4px 8px;');
+    console.log('%csound becomes image — a Trijbs experience', 'color:#93A8AC;');
+    console.log('→ trijbsworld.nl');
+
+  })();
+  </script>
+</body>
+</html>
