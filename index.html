@@ -9,133 +9,204 @@
   <meta name="description" content="A hub for experimental projects, creative tools, and interactive experiences by Trijbs.">
   <meta property="og:title" content="Trijbs – Digital Creator Platform" />
   <meta property="og:description" content="Explore visuals, audio, merch, and digital culture all in one place." />
-  <meta property="og:image" content="https://i.ibb.co/WnxdLGt/shirt1.jpg" />
+  <meta property="og:image" content="https://trijbsworld.nl/logo.png" />
   <meta property="og:url" content="https://trijbsworld.nl" />
   <meta name="twitter:card" content="summary_large_image" />
-  <link rel="icon" href="https://i.ibb.co/b5DwpZZj/Asset-2.png" type="image/png" />
+  <link rel="icon" href="logo.png" type="image/png" />
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@400;600;700;800&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
-  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 </head>
 <body>
   <!-- Loader -->
   <div id="preloader">
-    <picture>
-      <source srcset="https://i.postimg.cc/qB6DdWSx/in-b.webp" type="image/webp">
-      <img src="https://i.postimg.cc/qB6DdWSx/in-b.png" alt="Trijbs Loading" class="loader-logo" />
-    </picture>
+    <img src="loader-logo.png" alt="Trijbs Loading" class="loader-logo" />
   </div>
 
   <!-- Fullscreen Hero -->
   <section class="fullscreen-hero">
     <div class="hero-inner">
-      <picture>
-        <source srcset="https://i.ibb.co/b5DwpZZj/Asset-2.webp" type="image/webp">
-        <img id="logo-img" src="https://i.ibb.co/b5DwpZZj/Asset-2.png" alt="Trijbs Logo" class="hero-logo" loading="lazy" />
-      </picture>
+      <img id="logo-img" src="logo.png" alt="Trijbs Logo" class="hero-logo" loading="lazy" />
       <h1>Digital Creativity Engine</h1>
-      <p>Where visuals, code & culture collide.</p>
-      <a href="#explore" class="btn-primary">Enter</a>
+      <p>Where visuals, code &amp; culture collide.</p>
+      <a href="#explore" class="btn-primary">Dig in</a>
     </div>
   </section>
 
-  <div class="background-wrapper">
-    <!-- Project Showcase -->
-    <section class="grid-showcase" id="explore">
-      <h2>Explore Our Projects</h2>
-      <div class="grid-container">
-        <div class="grid-item">
-          <h3>PopFusion</h3>
-          <p>Music, visuals, and digital vibes combined.</p>
-          <a href="https://trijbs.eu/PopFusion2/" target="_blank" class="btn-secondary">Explore</a>
+  <main>
+    <div class="background-wrapper">
+      <!-- Project Showcase -->
+      <section class="grid-showcase" id="explore" aria-labelledby="projects-heading">
+        <h2 id="projects-heading">Explore the Work</h2>
+        <div class="grid-container">
+          <div class="grid-item">
+            <h3>PopFusion</h3>
+            <p>Music, visuals, and digital vibes combined.</p>
+            <a href="https://trijbs.eu/PopFusion2/" target="_blank" rel="noopener" class="btn-secondary">Dig in</a>
+          </div>
+          <div class="grid-item">
+            <h3>Urban Unleashed</h3>
+            <p>Digital streetwear &amp; immersive design drops.</p>
+            <a href="https://urban-unleashed.vercel.app" target="_blank" rel="noopener" class="btn-secondary">See the work</a>
+          </div>
+          <div class="grid-item">
+            <h3>Shop</h3>
+            <p>Merch and creator tools by Trijbs.</p>
+            <a href="https://trijbs.eu/Webshop/" target="_blank" rel="noopener" class="btn-secondary">Grab it</a>
+          </div>
         </div>
-        <div class="grid-item">
-          <h3>Urban Unleashed</h3>
-          <p>Digital streetwear & immersive design drops.</p>
-          <a href="https://urban-unleashed.vercel.app" target="_blank" class="btn-secondary">View</a>
-        </div>
-        <div class="grid-item">
-          <h3>Shop</h3>
-          <p>Merch and creator tools by Trijbs.</p>
-          <a href="https://trijbs.eu/Webshop/" target="_blank" class="btn-secondary">Shop Now</a>
-        </div>
+      </section>
+
+      <!-- Creator Prompt -->
+      <section class="quote-generator" aria-labelledby="quote-heading">
+        <h2 id="quote-heading">Creator Fuel</h2>
+        <blockquote id="quote-box" aria-live="polite">Loading...</blockquote>
+        <button onclick="loadQuote()" class="btn-secondary">New Quote</button>
+      </section>
+    </div>
+
+    <!-- About / Who is Trijbs -->
+    <section class="about" id="about" aria-labelledby="about-heading">
+      <div class="about-content">
+        <h2 id="about-heading">Who is Trijbs?</h2>
+        <p>A creator from the Netherlands who refused to pick a lane. Design, code, skate culture, music — it all started in the same place: needing to make something and figuring out how.</p>
+        <p>Trijbs is the name for everything that happens when visuals, technology, and street culture stop being separate categories and start colliding.</p>
+        <a href="mailto:contact@trijbsworld.nl" class="btn-secondary">Let's build</a>
       </div>
     </section>
 
-    <!-- Creator Prompt -->
-    <section class="quote-generator">
-      <h2>Creator Fuel</h2>
-      <blockquote id="quote-box">Loading...</blockquote>
-      <button onclick="loadQuote()" class="btn-secondary">New Quote</button>
-    </section>
-  </div>
+    <!-- Text Bar -->
+    <div class="text-bar" role="marquee" aria-label="Trijbs — where visuals, code & culture collide">
+      <span class="marquee-text">Where visuals, code &amp; culture collide — Build something real — Create today even if it sucks — Trijbs &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Where visuals, code &amp; culture collide — Build something real — Create today even if it sucks — Trijbs &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+    </div>
+  </main>
 
   <!-- Audio Player Overlay -->
-  <div class="audio-overlay" id="audioOverlay">
+  <div class="audio-overlay" id="audioOverlay" role="region" aria-label="Audio player">
     <div class="audio-header">
-      <button id="minimizeAudio" title="Toggle Audio Player">–</button>
-      <div class="equalizer"><span></span><span></span><span></span></div>
+      <button id="minimizeAudio" title="Toggle Audio Player" aria-label="Toggle audio player">–</button>
+      <div class="equalizer" aria-hidden="true"><span></span><span></span><span></span></div>
     </div>
-    <audio controls autoplay loop id="audioPlayer">
+    <audio controls loop id="audioPlayer">
       <source src="https://cdn.pixabay.com/download/audio/2022/10/03/audio_1437c36f6e.mp3?filename=lofi-study-112191.mp3" type="audio/mpeg">
     </audio>
   </div>
 
   <!-- Footer -->
   <footer>
-    <p>© 2025 Trijbs. All rights reserved.</p>
+    <p>© 2026 Trijbs. All rights reserved.</p>
     <div class="social-links">
-      <a href="https://twitter.com/trijbs" target="_blank">𝕏</a>
-      <a href="https://instagram.com/trjbs" target="_blank">📷</a>
-      <a href="https://www.tiktok.com/@trijbs.i" target="_blank">🎵</a>
+      <a href="https://twitter.com/trijbs" target="_blank" rel="noopener" class="social-icon" aria-label="Trijbs on X (Twitter)">𝕏</a>
+      <a href="https://instagram.com/trijbsworld" target="_blank" rel="noopener" class="social-icon" aria-label="Trijbs on Instagram">IG</a>
+      <a href="https://www.tiktok.com/@trijbs.i" target="_blank" rel="noopener" class="social-icon" aria-label="Trijbs on TikTok">TK</a>
+      <a href="https://github.com/trijbs" target="_blank" rel="noopener" class="social-icon" aria-label="Trijbs on GitHub">GH</a>
     </div>
+    <p class="contact-line"><a href="mailto:contact@trijbsworld.nl">contact@trijbsworld.nl</a></p>
   </footer>
 
-  <!-- JS -->
+  <!-- Inline: theme init (must run before body paint to prevent flash) -->
   <script>
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'light' || savedTheme === 'dark') {
-      document.body.classList.add(savedTheme + '-mode');
-    } else {
-      const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
-      document.body.classList.add(prefersLight ? 'light-mode' : 'dark-mode');
-    }
+    (function() {
+      const saved = localStorage.getItem('theme');
+      if (saved === 'light' || saved === 'dark') {
+        document.body.classList.add(saved + '-mode');
+      } else {
+        const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+        document.body.classList.add(prefersLight ? 'light-mode' : 'dark-mode');
+      }
+    })();
+  </script>
 
+  <!-- Inline: core functionality -->
+  <script>
     const quotes = [
+      // Original
       "Design is intelligence made visible.",
       "Create something today even if it sucks.",
       "Every pixel counts. Every line speaks.",
-      "Don’t just code. Communicate.",
-      "Good design is obvious. Great design is invisible."
+      "Don't just code. Communicate.",
+      "Good design is obvious. Great design is invisible.",
+      // Design
+      "Good design makes you forget someone made it. Great design makes you want to find out who.",
+      "A grid is not a cage. It is a starting point you earn the right to break.",
+      "The color you pick for the background matters as much as the color for the text. Everything is the design.",
+      "Clients say 'make it pop.' What they mean is 'make it work.' Figure out the difference early.",
+      "If your portfolio only shows your best work, it shows your least honest work.",
+      // Code
+      "The code you write tonight will embarrass you in six months. Ship it anyway.",
+      "Commenting your code is writing a letter to yourself at 3am six weeks from now. Be kind to that person.",
+      "The bug is always in the last place you look because you stop looking once you find it.",
+      "Learning a new framework every month is not being versatile. It is being afraid to go deep.",
+      "The best UI is the one the user does not notice. The worst is the one they screenshot.",
+      // Skate / Street
+      "Skating teaches you that the fall is not the failure. Stopping because you fell is.",
+      "Skate spots are not public property. They are borrowed space used better than intended.",
+      "The best skaters have the worst footage. They are too busy skating to film themselves.",
+      "A fresh pair of shoes will not fix your kickflip. You already know that.",
+      "Street culture does not have gatekeepers. It has filters. You either feel it or you do not.",
+      // Music / Visual
+      "A beat with room in it is more confident than one with everything filled in.",
+      "The song that sounds effortless took the most effort. That is the whole game.",
+      "Visuals that explain the music were not made for the music. They were made for the algorithm.",
+      "Sample something obscure. Not because obscurity is cool — because it means you actually went looking.",
+      "The best music video is the one playing in your head when the song hits.",
+      // Trijbs originals
+      "Where visuals, code and culture collide — that is not a tagline. That is a floor plan.",
+      "There is no such thing as a finished project. There is only a project you stopped touching.",
+      "You are not a designer who codes or a developer who designs. You are something that does not have a job title yet.",
+      "The creative block is not a wall. It is a waiting room. Most people sit in it too long.",
+      "Post the work before it is ready. Readiness is a feeling that never fully arrives.",
+      "If your process looks clean from the outside, you are either lying or not trying hard enough.",
+      "The people who will most value your work are the ones who are also building. Find them.",
+      "Being early to something is only valuable if you stay long enough to be proven right.",
+      "Trijbs is not a brand. It is a build log."
     ];
 
     function loadQuote() {
-      const quote = quotes[Math.floor(Math.random() * quotes.length)];
-      document.getElementById('quote-box').textContent = quote;
+      const box = document.getElementById('quote-box');
+      if (box) box.textContent = quotes[Math.floor(Math.random() * quotes.length)];
     }
 
     window.addEventListener('DOMContentLoaded', loadQuote);
 
-    window.addEventListener("load", function () {
-      const preloader = document.getElementById("preloader");
+    window.addEventListener('load', function () {
+      const preloader = document.getElementById('preloader');
       if (preloader) {
-        preloader.style.opacity = "0";
-        preloader.style.pointerEvents = "none";
-        setTimeout(() => preloader.remove(), 500);
+        preloader.style.opacity = '0';
+        preloader.style.pointerEvents = 'none';
+        setTimeout(() => preloader.remove(), 600);
       }
     });
 
-    document.addEventListener("DOMContentLoaded", () => {
-      const toggleBtn = document.getElementById("minimizeAudio");
-      const audioPlayer = document.getElementById("audioPlayer");
+    document.addEventListener('DOMContentLoaded', () => {
+      // Audio toggle
+      const toggleBtn = document.getElementById('minimizeAudio');
+      const audioPlayer = document.getElementById('audioPlayer');
       if (toggleBtn && audioPlayer) {
-        toggleBtn.addEventListener("click", () => {
-          const isHidden = audioPlayer.style.display === "none";
-          audioPlayer.style.display = isHidden ? "block" : "none";
-          toggleBtn.textContent = isHidden ? "–" : "+";
+        toggleBtn.addEventListener('click', () => {
+          const isHidden = audioPlayer.style.display === 'none';
+          audioPlayer.style.display = isHidden ? 'block' : 'none';
+          toggleBtn.textContent = isHidden ? '–' : '+';
+          toggleBtn.setAttribute('aria-label', isHidden ? 'Minimize audio player' : 'Expand audio player');
         });
       }
+
+      // Smooth scroll
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          const target = document.querySelector(this.getAttribute('href'));
+          if (target) {
+            e.preventDefault();
+            target.scrollIntoView({ behavior: 'smooth' });
+          }
+        });
+      });
     });
   </script>
+
+  <!-- Personality & Easter Eggs -->
+  <script src="trijbs.js" defer></script>
 </body>
 </html>
